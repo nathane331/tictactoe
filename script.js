@@ -50,12 +50,6 @@ function Gameboard(){
 
         board[playerRowInput][playerColumnInput].setValue(player);
 
-        
-        
-        
-        
-        
-
     }
 
 
@@ -81,6 +75,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     //instantiate a game board
     const board = Gameboard();
     let winnerFound = false;
+    let playedRounds = 1;
 
     const players = [
         {
@@ -103,10 +98,13 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     const printNewRound = () =>{
         board.printBoard();
+        console.log("ROUND "+ playedRounds);
         console.log('starting ' + getActivePlayer().name + '`s turn.');
     }
 
     const playRound = (row, column) => {
+
+        printNewRound();
 
         board.placeToken(row, column,  getActivePlayer().token);
 
@@ -114,57 +112,140 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         checkWinner(getActivePlayer().token);
         if(winnerFound == true)
         {
+            board.printBoard();
             console.log(getActivePlayer().name + " Wins!");
             return;
         }
 
+        playedRounds++;
+
         switchPlayerTurn();
-        printNewRound();
-        playRound();
+        //printNewRound();
+
+        if(playedRounds < 10)
+            playRound();
+        else{
+            console.log("DRAW");
+            return;
+        }
         
     };
 
 
     const checkWinner = (playerToken) =>{
 
+        let sequentialMatches = 0;
         const currentBoard = board.getBoard();
-        console.log(currentBoard[0][0].getValue());
+        
+            //check horizontal wins
+            console.log("checking for horizontal wins...");
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if(currentBoard[i][j].getValue() !== playerToken){
+                        //console.log("no match: " + playerToken + " : " +currentBoard[i][j].getValue());
+                        sequentialMatches = 0;
+                        //return;
+                    }
+                    else{
+                        console.log("match found: " + playerToken + " : " +currentBoard[i][j].getValue());
+                        sequentialMatches++;
 
-        const winningCombinations = [
-            [0,1,2], [3,4,5], [6,7,8], //horizontal wins
-            [0,3,6], [1,4,7],[2,5,8], //vertical wins
-            [0,4,8], [2,4,6] //diagonal wins
-        ];
-
-        winningCombinations.forEach((combo) =>{
-            const [a,b,c] = combo;
-
-            if(
-                
-                currentBoard[a][a].getValue() === playerToken
-
-            ){
-                console.log("Winner found");
+                        if(sequentialMatches == 3)
+                        {
+                            winnerFound = true;
+                        }
+                    }  
+                }   
             }
 
-                /* const printBoard = () =>{
-        const boardWithCellValues = board.map((row) => //for each row, call this function
-                                        row.map((cell) => //for each cell in the row, call this function
-                                            cell.getValue() //call cell.getValue
-                                                )
-                                            ) 
-        console.log(boardWithCellValues);
-        };*/
+            if(winnerFound == false){
+                console.log("checking for vertical wins...");
+                sequentialMatches = 0;
 
+                //check vertical wins
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if(currentBoard[j][i].getValue() !== playerToken){
+                            //console.log("no match: " + playerToken + " : " +currentBoard[j][i].getValue());
+                            sequentialMatches = 0;
+                            //return;
+                        }
+                        else{
+                            console.log("match found: " + playerToken + " : " +currentBoard[j][i].getValue());
+                            sequentialMatches++;
 
+                            if(sequentialMatches == 3)
+                            {
+                                winnerFound = true;
+                            }
+                        }  
+                    }   
+                }
+            }
 
-        });
+            if(winnerFound == false){
+
+                console.log("checking for leftward diagonal wins...");
+                sequentialMatches = 0;
+
+                //check diagonal wins
+                for (let i = 0; i < 3; i++) {
+                    
+                        if(currentBoard[i][i].getValue() !== playerToken){
+                            //console.log("no match: " + playerToken + " : " +currentBoard[i][i].getValue());
+                            sequentialMatches = 0;
+                            //return;
+                        }
+                        else{
+                            console.log("match found: " + playerToken + " : " +currentBoard[i][i].getValue());
+                            sequentialMatches++;
+
+                            if(sequentialMatches == 3)
+                            {
+                                winnerFound = true;
+                            }
+                        }  
+                       
+                }
+            }
+
+            if(winnerFound == false){
+
+                let j = 2;
+                console.log("checking for rightward diagonal wins...");
+                for (let i = 0; i < 3; i++) {  
+                    if(currentBoard[i][j].getValue() !== playerToken){
+                        //console.log("no match: " + playerToken + " : " + currentBoard[i][j].getValue());
+                        sequentialMatches = 0;
+                    }
+                    else{
+                        console.log("match found: " + playerToken + " : " + currentBoard[i][j].getValue());
+                        sequentialMatches++;
+
+                        if(sequentialMatches == 3)
+                        {
+                            winnerFound = true;
+                        }
+                    }
+                    j--;
+                       
+                }
+            }
+            
+        
     }
 
-    printNewRound();
+    
 
     return{playRound, getActivePlayer};
 }
+
+
+/////////////////////
+
+//  DOM VISUALS
+
+
 
 //instantiate a new game
 const game = GameController();
