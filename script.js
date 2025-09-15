@@ -21,7 +21,7 @@ function Gameboard(){
                                             cell.getValue() //call cell.getValue
                                                 )
                                             ) 
-        console.log(boardWithCellValues);
+        //console.log(boardWithCellValues);
     };
 
     const placeToken = (row, column, player) => {
@@ -36,10 +36,8 @@ function Gameboard(){
         
         do{
 
-            
-
-           // playerRowInput = prompt("Choose Row: ");
-           // playerColumnInput = prompt("Choose Column: ");
+           playerRowInput = prompt("Choose Row: ");
+           playerColumnInput = prompt("Choose Column: ");
 
             if(board[playerRowInput][playerColumnInput].getValue() !== '-'){
                 console.log("Space already occupied!");
@@ -76,6 +74,8 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     const board = Gameboard();
     let winnerFound = false;
     let playedRounds = 1;
+
+    const screen = ScreenController();
 
     const players = [
         {
@@ -119,6 +119,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
         playedRounds++;
 
+        screen.updateScreen();
         switchPlayerTurn();
         //printNewRound();
 
@@ -235,16 +236,45 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         
     }
 
-    
-
     return{playRound, getActivePlayer};
 }
 
 
 /////////////////////
-
 //  DOM VISUALS
 
+function ScreenController()
+{
+    const gameContainer = document.querySelector(".game-container");
+    const gameCells = gameContainer.querySelectorAll(".cell");
+
+    const updateScreen = () =>{
+        //clear the dom [set contents to empty]
+        
+        gameCells.forEach(cell => {
+            cell.textContent = "-";
+        });
+
+        //get most up to date board from the gamecontroller
+        const currentBoard = board.getBoard(); 
+
+        
+        
+        //get the active player from the gamecontroller
+        //render the player's turn
+        //populate each cell with its value [text]
+        let index = 0;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                gameCells[index].textContent = currentBoard[i][j].getValue();
+            } 
+            index++; 
+        }
+
+
+    }
+    return{updateScreen}
+}
 
 
 //instantiate a new game
