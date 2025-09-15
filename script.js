@@ -38,8 +38,8 @@ function Gameboard(){
 
             
 
-            playerRowInput = prompt("Choose Row: ");
-            playerColumnInput = prompt("Choose Column: ");
+           // playerRowInput = prompt("Choose Row: ");
+           // playerColumnInput = prompt("Choose Column: ");
 
             if(board[playerRowInput][playerColumnInput].getValue() !== '-'){
                 console.log("Space already occupied!");

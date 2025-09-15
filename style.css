@@ -1,0 +1,93 @@
+body{
+    background-color: #2b3240;
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* player 1 color: #f4d639
+    player 2 color:  #aa5f5d */
+
+.title{
+    font-size: 60px;
+    color: #aa5f5d;
+    font-family: "Titan One";
+    padding: 24px;
+}
+
+.game-start{
+    background-color: #aa5f5d;
+    padding: 20px;
+    border-radius: 18px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    
+}
+
+.game-start label{
+    font-family: "Titan One";
+    color:rgb(33, 33, 33);
+    font-weight: lighter;
+    font-size: 20px;  
+}
+
+.game-start input{
+    border-radius: 10px;
+    border-style:none;
+    height:24px;
+    padding-left: 10px;
+    font-weight:bolder;
+    text-transform:uppercase;
+}
+
+.game-start input:focus{
+    outline: dashed #f4d639;
+    background-color: #c9dae0;
+    height:20px;
+    width:20px;
+}
+
+.start-restart-btn{
+    border-radius: 50%;
+    border-style:none;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height:36px;
+}
+
+.game-container{
+    display:grid;
+    grid-template-rows: repeat(3,1fr);
+    grid-template-columns: repeat(3,1fr);
+    row-gap:12px;
+    column-gap: 12px;
+    width:400px;
+    height:400px;
+    padding: 24px;
+}
+
+.cell{
+    font-size: 60px;
+    font-family:"Titan One";
+    color:rgb(68, 68, 68);
+    background-color: #f4f8f8;
+    padding: 20px;
+
+    border-radius:18px;
+    border-style: none;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.cell:hover{
+    background-color: #c9dae0;
+    box-shadow: inset rgba(0, 0, 0, 0.20) 5px 5px 10px;
+}
