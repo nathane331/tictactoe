@@ -33,20 +33,22 @@ function Gameboard(){
         let playerRowInput = "";
         let playerColumnInput = "";
 
+        /*
         
         do{
 
-           playerRowInput = prompt("Choose Row: ");
-           playerColumnInput = prompt("Choose Column: ");
+            playerRowInput = prompt("Choose Row: ");
+            playerColumnInput = prompt("Choose Column: ");
 
-            if(board[playerRowInput][playerColumnInput].getValue() !== '-'){
+            if(board[playerRowInput][playerColumnInput].getValue() !== ' '){
                 console.log("Space already occupied!");
             }
 
-        }while(board[playerRowInput][playerColumnInput].getValue() !== '-')
+        }while(board[playerRowInput][playerColumnInput].getValue() !== ' ')
         
+        */
 
-        board[playerRowInput][playerColumnInput].setValue(player);
+        // board[playerRowInput][playerColumnInput].setValue(player);
 
     }
 
@@ -57,7 +59,7 @@ function Gameboard(){
 
 
 function Cell(){
-    let value = '-';
+    let value = ' ';
 
     //function setvalue(player){value = player;}
     const setValue = (player) => value = player;
@@ -72,10 +74,11 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     //instantiate a game board
     const board = Gameboard();
+    const screen = ScreenController();
+
     let winnerFound = false;
     let playedRounds = 1;
 
-    const screen = ScreenController();
 
     const players = [
         {
@@ -109,7 +112,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         board.placeToken(row, column,  getActivePlayer().token);
 
         //check for win condition
-        checkWinner(getActivePlayer().token);
+        // checkWinner(getActivePlayer().token);
         if(winnerFound == true)
         {
             board.printBoard();
@@ -119,16 +122,18 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
         playedRounds++;
 
-        screen.updateScreen();
+        screen.updateScreen(board);
         switchPlayerTurn();
         //printNewRound();
 
+        /*
         if(playedRounds < 10)
             playRound();
         else{
             console.log("DRAW");
             return;
         }
+        */
         
     };
 
@@ -245,35 +250,42 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
 function ScreenController()
 {
+
+
     const gameContainer = document.querySelector(".game-container");
     const gameCells = gameContainer.querySelectorAll(".cell");
 
-    const updateScreen = () =>{
+    console.log(gameCells);
+
+    const updateScreen = (gameboard) =>{
         //clear the dom [set contents to empty]
         
         gameCells.forEach(cell => {
-            cell.textContent = "-";
+            cell.textContent = ".";
         });
 
         //get most up to date board from the gamecontroller
-        const currentBoard = board.getBoard(); 
+        const currentBoard = gameboard.getBoard(); 
 
-        
-        
         //get the active player from the gamecontroller
         //render the player's turn
+
         //populate each cell with its value [text]
         let index = 0;
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 gameCells[index].textContent = currentBoard[i][j].getValue();
-            } 
-            index++; 
+                index++;
+            }  
         }
+    }
+
+
+    const clickHandler = () =>{
 
 
     }
-    return{updateScreen}
+    return{updateScreen, clickHandler}
 }
 
 
