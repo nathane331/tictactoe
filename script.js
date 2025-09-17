@@ -26,7 +26,6 @@ function Gameboard(){
 
     const placeToken = (row, column, player) => {
 
-        console.log("placing token at " + row + column);
         // const availableCells = board.filter((row) => row[column].getValue() === "$").map(row => row[column]);
         
         //check every column of every row and see if its value is $ (empty). 
@@ -37,16 +36,14 @@ function Gameboard(){
 
         
         
-        do{
-            //playerRowInput = prompt("Choose Row: ");
-            //playerColumnInput = prompt("Choose Column: "
-            if(board[playerRowInput][playerColumnInput].getValue() !== ' '){
-                console.log("Space already occupied!");
-            }
-           
-        }while(board[row][column].getValue() !== ' ')
+        
+        if(board[row][column].getValue() !== ' '){
+            console.log("Space already occupied!");
+        }
+        else{
+            board[row][column].setValue(player);
 
-        board[row][column].setValue(player);
+        }
 
     }
 
@@ -72,7 +69,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     //instantiate a game board
     const board = Gameboard();
-    
+
 
     let winnerFound = false;
     let playedRounds = 1;
@@ -99,18 +96,18 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     const printNewRound = () =>{
         board.printBoard();
-        console.log("ROUND "+ playedRounds);
-        console.log('starting ' + getActivePlayer().name + '`s turn.');
+        
     }
 
     const playRound = (row, column) => {
 
-        //printNewRound();
+        console.log("ROUND "+ playedRounds);
+        console.log('starting ' + getActivePlayer().name + '`s turn.');
         
         board.placeToken(row, column,  getActivePlayer().token);
 
         //check for win condition
-        // checkWinner(getActivePlayer().token);
+        checkWinner(getActivePlayer().token);
         if(winnerFound == true)
         {
             board.printBoard();
@@ -120,18 +117,8 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
         playedRounds++;
 
-        board.printBoard();
         switchPlayerTurn();
-        
-
-        /*
-        if(playedRounds < 10)
-            playRound();
-        else{
-            console.log("DRAW");
-            return;
-        }
-        */
+        printNewRound();
         
     };
 
@@ -235,19 +222,17 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
                        
                 }
             }
-            
-        
     }
 
-    return{playRound, getActivePlayer};
+    return{board, playRound, getActivePlayer};
 }
 
 
 /////////////////////
 //  DOM VISUALS
 
-function ScreenController()
-{
+function ScreenController(game)
+{    
 
     const gameContainer = document.querySelector(".game-container");
     
@@ -261,15 +246,15 @@ function ScreenController()
         });
 
         //get most up to date board from the gamecontroller
-        const currentBoard = game.board.getBoard(); 
-
-        //get the active player from the gamecontroller
-        //render the player's turn
-
+       let currentBoard = game.board;
+       currentBoard = currentBoard.getBoard();
+       
         //populate each cell with its value [text]
+        index = 0;
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
-                gameCells[i].textContent = currentBoard[i].getValue();
+                gameCells[index].textContent = currentBoard[i][j].getValue();
+                index++;
             }  
         }
     }
@@ -302,12 +287,15 @@ function ScreenController()
 
         //check that clicked button is still a valid space on the board
 
+        //game.checkValidSpace / return true or false
+        //if true
         game.playRound(clickedRow, clickedColumn);
-
-        clickedButton.textContent = game.getActivePlayer().token;
+        //if false
+        //do not advane round or switch player.
 
         //if so, fill gameboard with new value
         //and update screen
+        updateScreen();
         
     }
 
@@ -320,6 +308,8 @@ function ScreenController()
 //instantiate a new game
 const game = GameController();
 const screen = ScreenController(game);
+console.log("Active Player: " + game.getActivePlayer().token);
+
 //game.playRound();
 
 
