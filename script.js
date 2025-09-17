@@ -76,6 +76,8 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     const board = Gameboard();
     const screen = ScreenController();
 
+    screen.updateScreen(board);
+
     let winnerFound = false;
     let playedRounds = 1;
 
@@ -251,17 +253,30 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 function ScreenController()
 {
 
-
     const gameContainer = document.querySelector(".game-container");
-    const gameCells = gameContainer.querySelectorAll(".cell");
+    
+    for (let i = 0; i < 3; i++) {
+            //create three rows
+            const displayRow = document.createElement("div");
+            gameContainer.appendChild(displayRow);
+            displayRow.classList.add("display-row");
 
-    console.log(gameCells);
+            for (let j = 0; j < 3; j++) {
+                //inside each row create 3 cells
+                const displayCell = document.createElement("button");
+                displayRow.appendChild(displayCell);
+                displayCell.classList.add("cell");
+                displayCell.setAttribute('column', j);
+                displayCell.textContent = "&";  
+            }
+        }
 
     const updateScreen = (gameboard) =>{
+
+        const gameCells = gameContainer.querySelectorAll(".cell");
         //clear the dom [set contents to empty]
-        
         gameCells.forEach(cell => {
-            cell.textContent = ".";
+            cell.textContent = " ";
         });
 
         //get most up to date board from the gamecontroller
@@ -271,11 +286,11 @@ function ScreenController()
         //render the player's turn
 
         //populate each cell with its value [text]
-        let index = 0;
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
-                gameCells[index].textContent = currentBoard[i][j].getValue();
-                index++;
+                //gameCells[i].textContent = currentBoard[i].getValue();
+
+                
             }  
         }
     }
@@ -291,6 +306,6 @@ function ScreenController()
 
 //instantiate a new game
 const game = GameController();
-game.playRound();
+// game.playRound();
 
 
