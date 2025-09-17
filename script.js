@@ -21,34 +21,32 @@ function Gameboard(){
                                             cell.getValue() //call cell.getValue
                                                 )
                                             ) 
-        //console.log(boardWithCellValues);
+        console.log(boardWithCellValues);
     };
 
     const placeToken = (row, column, player) => {
+
+        console.log("placing token at " + row + column);
         // const availableCells = board.filter((row) => row[column].getValue() === "$").map(row => row[column]);
         
         //check every column of every row and see if its value is $ (empty). 
         // if yes, for each row, return row[column] cell that is empty.
 
-        let playerRowInput = "";
-        let playerColumnInput = "";
+        let playerRowInput = row;
+        let playerColumnInput = column;
 
-        /*
+        
         
         do{
-
-            playerRowInput = prompt("Choose Row: ");
-            playerColumnInput = prompt("Choose Column: ");
-
+            //playerRowInput = prompt("Choose Row: ");
+            //playerColumnInput = prompt("Choose Column: "
             if(board[playerRowInput][playerColumnInput].getValue() !== ' '){
                 console.log("Space already occupied!");
             }
+           
+        }while(board[row][column].getValue() !== ' ')
 
-        }while(board[playerRowInput][playerColumnInput].getValue() !== ' ')
-        
-        */
-
-        // board[playerRowInput][playerColumnInput].setValue(player);
+        board[row][column].setValue(player);
 
     }
 
@@ -74,9 +72,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     //instantiate a game board
     const board = Gameboard();
-    const screen = ScreenController();
-
-    screen.updateScreen(board);
+    
 
     let winnerFound = false;
     let playedRounds = 1;
@@ -109,8 +105,8 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     const playRound = (row, column) => {
 
-        printNewRound();
-
+        //printNewRound();
+        
         board.placeToken(row, column,  getActivePlayer().token);
 
         //check for win condition
@@ -124,9 +120,9 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
         playedRounds++;
 
-        screen.updateScreen(board);
+        board.printBoard();
         switchPlayerTurn();
-        //printNewRound();
+        
 
         /*
         if(playedRounds < 10)
@@ -255,23 +251,8 @@ function ScreenController()
 
     const gameContainer = document.querySelector(".game-container");
     
-    for (let i = 0; i < 3; i++) {
-            //create three rows
-            const displayRow = document.createElement("div");
-            gameContainer.appendChild(displayRow);
-            displayRow.classList.add("display-row");
-
-            for (let j = 0; j < 3; j++) {
-                //inside each row create 3 cells
-                const displayCell = document.createElement("button");
-                displayRow.appendChild(displayCell);
-                displayCell.classList.add("cell");
-                displayCell.setAttribute('column', j);
-                displayCell.textContent = "&";  
-            }
-        }
-
-    const updateScreen = (gameboard) =>{
+    
+    const updateScreen = () =>{
 
         const gameCells = gameContainer.querySelectorAll(".cell");
         //clear the dom [set contents to empty]
@@ -280,7 +261,7 @@ function ScreenController()
         });
 
         //get most up to date board from the gamecontroller
-        const currentBoard = gameboard.getBoard(); 
+        const currentBoard = game.board.getBoard(); 
 
         //get the active player from the gamecontroller
         //render the player's turn
@@ -288,24 +269,57 @@ function ScreenController()
         //populate each cell with its value [text]
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
-                //gameCells[i].textContent = currentBoard[i].getValue();
-
-                
+                gameCells[i].textContent = currentBoard[i].getValue();
             }  
         }
     }
 
+    for (let i = 0; i < 3; i++) {
+        //create three rows
+        const displayRow = document.createElement("div");
+        gameContainer.appendChild(displayRow);
+        displayRow.classList.add("display-row");
 
-    const clickHandler = () =>{
+        for (let j = 0; j < 3; j++) {
+            //inside each row create 3 cells
+            const displayCell = document.createElement("button");
+            displayRow.appendChild(displayCell);
+            displayCell.classList.add("cell");
+            displayCell.setAttribute('row', i);
+            displayCell.setAttribute('column', j);
+            displayCell.textContent = " ";  
 
-
+            displayCell.addEventListener("click", clickHandler);
+        }
     }
+
+    function clickHandler(event){
+        const clickedButton = event.currentTarget;
+        const clickedRow = clickedButton.getAttribute("row");
+        const clickedColumn = clickedButton.getAttribute("column")
+
+        console.log("button clicked in " + clickedRow +","+clickedColumn);
+
+        //check that clicked button is still a valid space on the board
+
+        game.playRound(clickedRow, clickedColumn);
+
+        clickedButton.textContent = game.getActivePlayer().token;
+
+        //if so, fill gameboard with new value
+        //and update screen
+        
+    }
+
     return{updateScreen, clickHandler}
 }
 
 
+
+
 //instantiate a new game
 const game = GameController();
-// game.playRound();
+const screen = ScreenController(game);
+//game.playRound();
 
 
