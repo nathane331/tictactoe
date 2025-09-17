@@ -1,4 +1,8 @@
 
+
+
+
+
 //gameboard module
 function Gameboard(){
     const rows = 3;
@@ -225,7 +229,14 @@ function ScreenController(game)
 {    
 
     const gameContainer = document.querySelector(".game-container");
+
+    const startModal = document.querySelector(".modal-background");
+    const startButton = document.querySelector(".start-restart-btn");
+    startModal.showModal();
+    startButton.addEventListener('click', () =>{startModal.close();});
     
+    const currentTurnDisplay = document.querySelector(".current-turn");
+
     
     const updateScreen = () =>{
 
@@ -275,15 +286,8 @@ function ScreenController(game)
 
         console.log("button clicked in " + clickedRow +","+clickedColumn);
 
-        //check that clicked button is still a valid space on the board
-
-        //game.checkValidSpace / return true or false
-        //if true
         game.playRound(clickedRow, clickedColumn);
-        //if false
-        //do not advane round or switch player.
-
-        //if so, fill gameboard with new value
+        
         //and update screen
         updateScreen();
         
@@ -296,10 +300,15 @@ function ScreenController(game)
 
 
 //instantiate a new game
+
+
 const game = GameController();
 const screen = ScreenController(game);
 console.log("Active Player: " + game.getActivePlayer().token);
 
-//game.playRound();
+
+
+
+
 
 
