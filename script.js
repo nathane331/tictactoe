@@ -25,26 +25,7 @@ function Gameboard(){
     };
 
     const placeToken = (row, column, player) => {
-
-        // const availableCells = board.filter((row) => row[column].getValue() === "$").map(row => row[column]);
-        
-        //check every column of every row and see if its value is $ (empty). 
-        // if yes, for each row, return row[column] cell that is empty.
-
-        let playerRowInput = row;
-        let playerColumnInput = column;
-
-        
-        
-        
-        if(board[row][column].getValue() !== ' '){
-            console.log("Space already occupied!");
-        }
-        else{
-            board[row][column].setValue(player);
-
-        }
-
+        board[row][column].setValue(player);
     }
 
 
@@ -101,24 +82,33 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     const playRound = (row, column) => {
 
+        currentBoard = board.getBoard();
         console.log("ROUND "+ playedRounds);
         console.log('starting ' + getActivePlayer().name + '`s turn.');
         
-        board.placeToken(row, column,  getActivePlayer().token);
 
-        //check for win condition
-        checkWinner(getActivePlayer().token);
-        if(winnerFound == true)
-        {
-            board.printBoard();
-            console.log(getActivePlayer().name + " Wins!");
-            return;
+        if(currentBoard[row][column].getValue() !== ' '){
+            console.log("Space already occupied!");
+        }
+        else{
+            board.placeToken(row, column,  getActivePlayer().token);
+
+            //check for win condition
+            checkWinner(getActivePlayer().token);
+            if(winnerFound == true)
+            {
+                board.printBoard();
+                console.log(getActivePlayer().name + " Wins!");
+                return;
+            }
+
+            playedRounds++;
+
+            switchPlayerTurn();
+            printNewRound();
         }
 
-        playedRounds++;
-
-        switchPlayerTurn();
-        printNewRound();
+        
         
     };
 
@@ -138,7 +128,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
                         //return;
                     }
                     else{
-                        console.log("match found: " + playerToken + " : " +currentBoard[i][j].getValue());
+                        //console.log("match found: " + playerToken + " : " +currentBoard[i][j].getValue());
                         sequentialMatches++;
 
                         if(sequentialMatches == 3)
@@ -162,7 +152,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
                             //return;
                         }
                         else{
-                            console.log("match found: " + playerToken + " : " +currentBoard[j][i].getValue());
+                            //console.log("match found: " + playerToken + " : " +currentBoard[j][i].getValue());
                             sequentialMatches++;
 
                             if(sequentialMatches == 3)
@@ -188,7 +178,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
                             //return;
                         }
                         else{
-                            console.log("match found: " + playerToken + " : " +currentBoard[i][i].getValue());
+                            //console.log("match found: " + playerToken + " : " +currentBoard[i][i].getValue());
                             sequentialMatches++;
 
                             if(sequentialMatches == 3)
