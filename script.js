@@ -1,8 +1,4 @@
 
-
-
-
-
 //gameboard module
 function Gameboard(){
     const rows = 3;
@@ -258,6 +254,8 @@ function ScreenController(game)
                 index++;
             }  
         }
+
+        currentTurnDisplay.textContent = game.getActivePlayer().name;
     }
 
     for (let i = 0; i < 3; i++) {
