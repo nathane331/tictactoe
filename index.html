@@ -15,27 +15,32 @@
 </head>
 <body>
     <div class="title">Tic <span style="color:#f4d639">Tac</span> Toe</div>
-    <div class="current-turn"></div>
+    <div class="current-turn">
+        <div class="current-turn-text"></div>
+        <button class="restart-btn">RESTART</button>
+    </div>
 
     <div class="gameboard">
         <div class="game-container"></div>
     </div>
 
 
-    <dialog class="modal-background">
-        <div class="start-restart-modal">
-            <div class="player-name-input">
-                <label for="player-1-name">Player 1:</label>
-                <input type="text" name="player-1-name" id="player-1-name" placeholder="Player 1">
-                <label for="player-2-name">Player 2:</label>
-                <input type="text" name="player-2-name" id="player-2-name" placeholder="Player 2">
-            </div>
-            <div>
-                <button class="start-restart-btn" autofocus>START!</button>
-            </div>
-        </div>
+    <dialog class="modal-background"> 
+        <form action="">
+            <fieldset class="name-submit">
+                <div class="start-restart-modal">
+                <div class="player-name-input">
+                    <label for="player-1-name">Player 1:</label>
+                    <input type="text" name="player-1-name" id="player-1-name" placeholder="Player 1">
+                    <label for="player-2-name">Player 2:</label>
+                    <input type="text" name="player-2-name" id="player-2-name" placeholder="Player 2">
+                </div>
+                <div>
+                    <button class="start-restart-btn" autofocus>START!</button>
+                </div>
+                </div>
+            </fieldset>
+        </form> 
     </dialog>
-    
-    
 </body>
 </html>

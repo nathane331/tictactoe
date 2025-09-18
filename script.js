@@ -1,4 +1,4 @@
-
+let winnerFound = false;
 //gameboard module
 function Gameboard(){
     const rows = 3;
@@ -46,13 +46,17 @@ function Cell(){
 }
 
 
-function GameController(playerOneName = "Player One", playerTwoName = "Player Two"){
+function GameController(playerOneName, playerTwoName){
 
+    if(playerOneName === '')
+            playerOneName = "Player One";
+    if(playerTwoName === '')
+            playerTwoName = "Player Two";
     //instantiate a game board
     const board = Gameboard();
 
 
-    let winnerFound = false;
+    
     let playedRounds = 1;
 
 
@@ -107,9 +111,6 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
             switchPlayerTurn();
             printNewRound();
         }
-
-        
-        
     };
 
 
@@ -223,17 +224,6 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
 function ScreenController(game)
 {    
-
-    const gameContainer = document.querySelector(".game-container");
-
-    const startModal = document.querySelector(".modal-background");
-    const startButton = document.querySelector(".start-restart-btn");
-    startModal.showModal();
-    startButton.addEventListener('click', () =>{startModal.close();});
-    
-    const currentTurnDisplay = document.querySelector(".current-turn");
-
-    
     const updateScreen = () =>{
 
         const gameCells = gameContainer.querySelectorAll(".cell");
@@ -255,7 +245,14 @@ function ScreenController(game)
             }  
         }
 
-        currentTurnDisplay.textContent = game.getActivePlayer().name;
+        currentTurnDisplay.textContent = game.getActivePlayer().name + "'s turn.";
+
+        console.log(winnerFound);
+        if(winnerFound == true)
+        {
+            currentTurnDisplay.textContent = game.getActivePlayer().name + " wins!";
+        }
+
     }
 
     for (let i = 0; i < 3; i++) {
@@ -299,10 +296,34 @@ function ScreenController(game)
 
 //instantiate a new game
 
+const gameContainer = document.querySelector(".game-container");
 
-const game = GameController();
-const screen = ScreenController(game);
-console.log("Active Player: " + game.getActivePlayer().token);
+    const startModal = document.querySelector(".modal-background");
+    const startButton = document.querySelector(".start-restart-btn");
+    startModal.showModal();
+    
+    const currentTurnDisplay = document.querySelector(".current-turn-text");
+
+const player1input = document.querySelector("#player-1-name");
+const player2input = document.querySelector("#player-2-name");
+
+
+startButton.addEventListener('click', function(event){
+
+        event.preventDefault();
+        startModal.close();
+
+    const game = GameController(player1input.value, player2input.value);
+    const screen = ScreenController(game);
+    console.log("Active Player: " + game.getActivePlayer().token);
+    currentTurnDisplay.textContent = game.getActivePlayer().name + "'s turn.";
+
+});   
+
+
+const restartButton = document.querySelector(".restart-btn");
+restartButton.addEventListener("click", () => {window.location.reload();});
+
 
 
 
